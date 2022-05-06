@@ -1,4 +1,4 @@
-module github.com/scaffoldly/adapter-go/aws/apigateway/lambda/gorillamux
+module github.com/scaffoldly/lambda-adapter-go/apigateway/gorillamux
 
 go 1.18
 
