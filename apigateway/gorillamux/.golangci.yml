@@ -1,0 +1,20 @@
+linters:
+  disable-all: true
+  enable:
+    - gofmt
+    - errcheck
+    - deadcode
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unused
+    - varcheck
+    - stylecheck
+
+linters-settings:
+  stylecheck:
+    go: "1.18"
+    checks: ["all"]
