@@ -1,4 +1,4 @@
-# AWS Lambda Adapters for Go [![Godoc](https://godoc.org/github.com/scaffoldly/lambda-adapter-go?status.svg)](https://godoc.org/github.com/scaffoldly/lambda-adapter-go)
+# AWS Lambda Adapters for Go
 
 `lambda-adapter-go` is a collection of libraries that serve as adapters for
 running Go in AWS Lambda.
