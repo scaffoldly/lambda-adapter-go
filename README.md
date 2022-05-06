@@ -7,7 +7,7 @@ running Go in AWS Lambda.
 
 Please see the following modules:
 
-- [API Gateway + `gorilla/mux`)](./apigateway/gorillamux/README.md)
+- [API Gateway + `gorilla/mux`](./apigateway/gorillamux/README.md)
 
 ## Reporting Issues
 
