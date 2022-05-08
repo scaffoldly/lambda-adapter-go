@@ -8,7 +8,7 @@ import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/core"
 )
 
-func (adapter *Adapter) HandleRestRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest) (APIGatewayProxyResponse, error) {
+func (adapter *Adapter) handleRestRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest) (APIGatewayProxyResponse, error) {
 	req, err := adapter.EventToRequestWithContext(ctx, proxyRequest)
 
 	if err != nil {

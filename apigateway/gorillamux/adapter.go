@@ -22,11 +22,11 @@ type ErrorHandler interface {
 	handleError(err error, statusCode *int) (APIGatewayProxyResponse, error)
 }
 
-type DefaultErrorHandler struct {
+type defaultErrorHandler struct {
 	ErrorHandler
 }
 
-func (handler *DefaultErrorHandler) handleError(err error, statusCode *int) (APIGatewayProxyResponse, error) {
+func (handler *defaultErrorHandler) handleError(err error, statusCode *int) (APIGatewayProxyResponse, error) {
 	if statusCode == nil {
 		return APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError}, err
 	}
@@ -51,13 +51,23 @@ func NewAdapter(router *mux.Router) *Adapter {
 		paths:  paths{},
 	}
 
-	adapter.errorHandler = &DefaultErrorHandler{}
+	adapter.errorHandler = &defaultErrorHandler{}
 
 	return adapter
 }
 
 func (adapter *Adapter) WithWebsocketPath(path string) *Adapter {
 	adapter.paths.websocket = &path
+	return adapter
+}
+
+func (adapter *Adapter) WithErrorHandler(handler *ErrorHandler) *Adapter {
+	if handler == nil {
+		adapter.errorHandler = &defaultErrorHandler{}
+		return adapter
+	}
+
+	adapter.errorHandler = *handler
 	return adapter
 }
 
@@ -69,10 +79,10 @@ func (adapter *Adapter) Handle(ctx context.Context, event map[string]interface{}
 	}
 
 	if isWebsocketRequest(proxyRequest, event) {
-		resp, err := adapter.HandleWebsocketRequest(ctx, proxyRequest, event)
+		resp, err := adapter.handleWebsocketRequest(ctx, proxyRequest, event)
 		return resp, err
 	}
 
-	resp, err := adapter.HandleRestRequest(ctx, proxyRequest)
+	resp, err := adapter.handleRestRequest(ctx, proxyRequest)
 	return resp, err
 }
