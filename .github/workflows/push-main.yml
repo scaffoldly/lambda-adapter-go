@@ -28,3 +28,4 @@ jobs:
           action: prerelease
           version-file: sly.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tag-prefix: "v"
