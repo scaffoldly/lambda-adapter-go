@@ -21,7 +21,7 @@ func isWebsocketRequest(proxyRequest events.APIGatewayProxyRequest, event map[st
 	return false
 }
 
-func (adapter *Adapter) HandleWebsocketRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest, event map[string]interface{}) (*APIGatewayProxyResponse, error) {
+func (adapter *Adapter) HandleWebsocketRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest, event map[string]interface{}) (APIGatewayProxyResponse, error) {
 	if adapter.paths.websocket == nil {
 		return adapter.errorHandler.handleError(core.NewLoggedError("adapter.WithWebsocketPath(...) is required to proxy websocket requests"), nil)
 	}

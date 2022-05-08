@@ -8,11 +8,11 @@ import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/core"
 )
 
-func (adapter *Adapter) HandleRestRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest) (*APIGatewayProxyResponse, error) {
+func (adapter *Adapter) HandleRestRequest(ctx context.Context, proxyRequest events.APIGatewayProxyRequest) (APIGatewayProxyResponse, error) {
 	req, err := adapter.EventToRequestWithContext(ctx, proxyRequest)
 
 	if err != nil {
-		return nil, core.NewLoggedError("Unable to convert event to HTTP Request: %v", err)
+		return adapter.errorHandler.handleError(core.NewLoggedError("Unable to convert event to HTTP Request: %v", err), nil)
 	}
 
 	w := core.NewProxyResponseWriter()
@@ -20,10 +20,10 @@ func (adapter *Adapter) HandleRestRequest(ctx context.Context, proxyRequest even
 
 	resp, err := w.GetProxyResponse()
 	if err != nil {
-		return adapter.errorHandler.handleError(core.NewLoggedError("adapter.WithWebsocketPath(...) is required to proxy websocket requests"), nil)
+		return adapter.errorHandler.handleError(core.NewLoggedError("adapter.WithWebsocketPath(...) is required to proxy websocket requests"), &resp.StatusCode)
 	}
 
 	proxyResponse := APIGatewayProxyResponse(resp)
 
-	return &proxyResponse, nil
+	return proxyResponse, nil
 }

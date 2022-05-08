@@ -19,21 +19,19 @@ type APIGatewayProxyResponse struct {
 }
 
 type ErrorHandler interface {
-	handleError(err error, statusCode *int) (*APIGatewayProxyResponse, error)
+	handleError(err error, statusCode *int) (APIGatewayProxyResponse, error)
 }
 
 type DefaultErrorHandler struct {
 	ErrorHandler
 }
 
-func (handler *DefaultErrorHandler) handleError(err error, statusCode *int) (*APIGatewayProxyResponse, error) {
+func (handler *DefaultErrorHandler) handleError(err error, statusCode *int) (APIGatewayProxyResponse, error) {
 	if statusCode == nil {
-		response := APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError}
-		return &response, err
+		return APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError}, err
 	}
 
-	response := APIGatewayProxyResponse{StatusCode: *statusCode}
-	return &response, err
+	return APIGatewayProxyResponse{StatusCode: *statusCode}, err
 }
 
 type paths struct {
@@ -63,7 +61,7 @@ func (adapter *Adapter) WithWebsocketPath(path string) *Adapter {
 	return adapter
 }
 
-func (adapter *Adapter) Handle(ctx context.Context, event map[string]interface{}) (*APIGatewayProxyResponse, error) {
+func (adapter *Adapter) Handle(ctx context.Context, event map[string]interface{}) (APIGatewayProxyResponse, error) {
 	proxyRequest := events.APIGatewayProxyRequest{}
 	err := mapstructure.Decode(event, &proxyRequest)
 	if err != nil {
